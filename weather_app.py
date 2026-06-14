@@ -72,7 +72,12 @@ if __name__ == "__main__":
             from weather_info import read_weather_from_file, print_weather_summary
             print_weather_summary(weather)
     else:
-        weather = get_current_weather(city="Москва")
-        if weather:
-            save_weather_to_file(weather)
-            print("Выполните: python weather_info.py для красивого вывода")
+        city = input("Введите название города: ")
+        if city.strip():
+            weather = get_current_weather(city=city.strip())
+            if weather:
+                save_weather_to_file(weather)
+                from weather_info import read_weather_from_file, print_weather_summary
+                print_weather_summary(weather)
+        else:
+            print("Название города не введено")
