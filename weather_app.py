@@ -1,6 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 
@@ -50,5 +51,28 @@ def get_current_weather(city: str = None, latitude: float = None, longitude: flo
         return get_weather_by_coordinates(latitude, longitude)
 
 
+def save_weather_to_file(weather_data: dict, filename: str = "weather.json"):
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(weather_data, f, ensure_ascii=False, indent=2)
+    print(f"Погода сохранена в файл: {filename}")
+
+
 if __name__ == "__main__":
-    print(get_current_weather(city="Москва"))
+    import sys
+    
+    if len(sys.argv) > 1 and sys.argv[1] == "--read":
+        from weather_info import read_weather_from_file, print_weather_summary
+        weather = read_weather_from_file()
+        print_weather_summary(weather)
+    elif len(sys.argv) > 1 and sys.argv[1] == "--city":
+        city = sys.argv[2] if len(sys.argv) > 2 else "Москва"
+        weather = get_current_weather(city=city)
+        if weather:
+            save_weather_to_file(weather)
+            from weather_info import read_weather_from_file, print_weather_summary
+            print_weather_summary(weather)
+    else:
+        weather = get_current_weather(city="Москва")
+        if weather:
+            save_weather_to_file(weather)
+            print("Выполните: python weather_info.py для красивого вывода")
