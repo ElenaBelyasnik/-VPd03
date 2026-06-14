@@ -5,6 +5,22 @@ import os
 load_dotenv()
 
 
+def get_coordinates(city: str) -> tuple:
+    API_KEY = os.getenv("API_KEY")
+    headers = {
+        'User-Agent': 'WeatherApp/1.0'
+    }
+    url = f'https://nominatim.openstreetmap.org/search?q={city}&format=json'
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        if data:
+            lat = float(data[0]['lat'])
+            lon = float(data[0]['lon'])
+            return lat, lon
+    return None, None
+
+
 def get_weather_by_coordinates(latitude: float, longitude: float) -> dict:
     API_KEY = os.getenv("API_KEY")
     headers = {
@@ -22,11 +38,17 @@ def get_weather_by_coordinates(latitude: float, longitude: float) -> dict:
 def get_current_weather(city: str = None, latitude: float = None, longitude: float = None) -> dict:
     if city:
         print(f"Получаем погоду для города: {city}")
-        return
+        lat, lon = get_coordinates(city)
+        if lat and lon:
+            print(f"Координаты: {lat}, {lon}")
+            return get_weather_by_coordinates(lat, lon)
+        else:
+            print("Не удалось найти координаты города")
+            return None
     if latitude and longitude:
         print(f"Получаем погоду для координат: {latitude}, {longitude}")
         return get_weather_by_coordinates(latitude, longitude)
 
 
 if __name__ == "__main__":
-    print(get_weather_by_coordinates(55.7558, 37.6173))
+    print(get_current_weather(city="Москва"))
