@@ -58,26 +58,31 @@ def save_weather_to_file(weather_data: dict, filename: str = "weather.json"):
 
 
 if __name__ == "__main__":
-    import sys
+    from weather_info import read_weather_from_file, print_weather_summary
     
-    if len(sys.argv) > 1 and sys.argv[1] == "--read":
-        from weather_info import read_weather_from_file, print_weather_summary
-        weather = read_weather_from_file()
-        print_weather_summary(weather)
-    elif len(sys.argv) > 1 and sys.argv[1] == "--city":
-        city = sys.argv[2] if len(sys.argv) > 2 else "Москва"
-        weather = get_current_weather(city=city)
-        if weather:
-            save_weather_to_file(weather)
-            from weather_info import read_weather_from_file, print_weather_summary
-            print_weather_summary(weather)
-    else:
-        city = input("Введите название города: ")
-        if city.strip():
-            weather = get_current_weather(city=city.strip())
-            if weather:
-                save_weather_to_file(weather)
-                from weather_info import read_weather_from_file, print_weather_summary
-                print_weather_summary(weather)
+    while True:
+        print("\n" + "="*50)
+        print("== Прогноз погоды на основе API Яндекс.Погоды ==")
+        print("="*50)
+        print("1. Прогноз по названию города")
+        print("2. Выход")
+        print("="*50)
+        
+        choice = input("\nВыберите действие (1-2): ").strip()
+        
+        if choice == "1":
+            city = input("\nВведите название города: ").strip()
+            if city:
+                weather = get_current_weather(city=city)
+                if weather:
+                    save_weather_to_file(weather)
+                    print_weather_summary(weather)
+                else:
+                    print("Не удалось получить данные о погоде")
+            else:
+                print("Название города не введено")
+        elif choice == "2":
+            print("\nДо свидания!")
+            break
         else:
-            print("Название города не введено")
+            print("Некорректный выбор. Пожалуйста, введите 1 или 2")
