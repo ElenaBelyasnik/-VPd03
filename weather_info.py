@@ -158,8 +158,8 @@ def print_weather_summary(weather: Dict[str, Any]) -> None:
                 condition = part.get("condition", "")
                 wind = part.get("wind_speed", "N/A")
                 print(
-                    f"  {label}: {Fore.CYAN}{temp_avg}°C{Style.RESET_ALL} | "
-                    f"{wind} м/с | {_get_condition_emoji(condition)} {condition}"
+                    f"  {label}: {Fore.CYAN}{temp_avg}°C{Style.RESET_ALL}  | "
+                    f"{str(wind):>5} м/с | {_get_condition_emoji(condition)} {condition}"
                 )
 
     print(Fore.CYAN + "=" * 50 + Style.RESET_ALL + "\n")
@@ -321,7 +321,7 @@ def print_extended_weather(weather: Dict[str, Any]) -> None:
             print(f"  {Fore.GREEN}{air_quality}{Style.RESET_ALL}")
     else:
         print(
-            f"  {Fore.YELLOW}Данные о качестве воздуха не доступны для этого региона{Style.RESET_ALL}"
+            f"  {Fore.YELLOW}«Данные о качестве воздуха не доступны для вашего тарифного плана/региона».{Style.RESET_ALL}"
         )
 
     # Прогноз на день
@@ -344,8 +344,8 @@ def print_extended_weather(weather: Dict[str, Any]) -> None:
                 condition = part.get("condition", "")
                 wind = part.get("wind_speed", "N/A")
                 print(
-                    f"  {label}: {Fore.CYAN}{temp_avg}°C{Style.RESET_ALL} | "
-                    f"{wind} м/с | {_get_condition_emoji(condition)} {condition}"
+                    f"  {label}: {Fore.CYAN}{temp_avg}°C{Style.RESET_ALL}  | "
+                    f"{str(wind):>5} м/с | {_get_condition_emoji(condition)} {condition}"
                 )
 
     print(Fore.CYAN + "=" * 50 + Style.RESET_ALL + "\n")
